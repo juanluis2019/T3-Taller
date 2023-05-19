@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Transacciones</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1> Transacciones<h1> 
+  <h3>Numero operaciones: <%= operaciones%></h3>
+  <h3> Numero operaciones 2200: <%= resumen_operaciones.numero_2200%></h3>
+  <h3> Numero operaciones 2400: <%= resumen_operaciones.numero_2400%></h3>
+  <h3> Monto operaciones 2200: <%= resumen_operaciones.monto_2200%></h3>
+  <h3> Monto operaciones 2400: <%= resumen_operaciones.monto_2400%></h3>
+  <table>
+    <tr>
+      <th>ID Mensaje</th>
+      <th>Tipo de Operación</th>
+      <th>Banco Origen</th>
+      <th>Cuenta Origen</th>
+      <th>Banco Destino</th>
+      <th>Cuenta Destino</th>
+      <th>Monto</th>
+    </tr>
+    <% Object.keys(transactions).forEach(function(id) { %>
+      <% const transaction = transactions[id]; %>
+      <tr>
+        <td><%= id %></td>
+        <td><%= transaction.tipo_operacion %></td>
+        <td><%= transaction.banco_origen %></td>
+        <td><%= transaction.cuenta_origen %></td>
+        <td><%= transaction.banco_destino %></td>
+        <td><%= transaction.cuenta_destino %></td>
+        <td><%= transaction.monto %></td>
+      </tr>
+    <% }); %>
+  </table>
+</body>
+</html>
