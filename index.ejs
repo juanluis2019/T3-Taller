@@ -14,14 +14,19 @@
       border-bottom: 1px solid #ddd;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1> Transacciones<h1> 
-  <h3>Numero operaciones: <%= operaciones%></h3>
-  <h3> Numero operaciones 2200: <%= resumen_operaciones.numero_2200%></h3>
-  <h3> Numero operaciones 2400: <%= resumen_operaciones.numero_2400%></h3>
-  <h3> Monto operaciones 2200: <%= resumen_operaciones.monto_2200%></h3>
-  <h3> Monto operaciones 2400: <%= resumen_operaciones.monto_2400%></h3>
+  <h1>Transacciones</h1> 
+  <h3>Numero operaciones: <%= operaciones %></h3>
+  <h3>Numero operaciones 2200: <%= resumen_operaciones.numero_2200 %></h3>
+  <h3>Numero operaciones 2400: <%= resumen_operaciones.numero_2400 %></h3>
+  <h3>Monto operaciones 2200: <%= resumen_operaciones.monto_2200 %></h3>
+  <h3>Monto operaciones 2400: <%= resumen_operaciones.monto_2400 %></h3>
+
+  
+ 
+  <h1>Ultimas 100 transacciones</h1>
   <table>
     <tr>
       <th>ID Mensaje</th>
@@ -32,7 +37,8 @@
       <th>Cuenta Destino</th>
       <th>Monto</th>
     </tr>
-    <% Object.keys(transactions).forEach(function(id) { %>
+    <% const transactionsKeys = Object.keys(transactions).slice(-100); %>
+    <% transactionsKeys.forEach(function(id) { %>
       <% const transaction = transactions[id]; %>
       <tr>
         <td><%= id %></td>
@@ -45,5 +51,62 @@
       </tr>
     <% }); %>
   </table>
+  <h1>Histograma</h1> 
+  <script>
+    // Obtén las etiquetas y los datos del histograma
+    const histogramaEtiquetas = [
+      "Menor a $10.000",
+      "Entre $10.000 y $49.999",
+      "Entre $50.009 y $99.999",
+      "Entre $100.000 y $499.999",
+      "Entre $500.000 y $999.999",
+      "Entre $1.000.000 y $9.999.999",
+      "Más de $9.999.999"
+    ];
+    const histogramaData = [
+      <%= histograma_transacciones["Menor_a_$10.000"] %>,
+      <%= histograma_transacciones["Entre_$10.000_y_$49.999"] %>,
+      <%= histograma_transacciones["Entre_$50.009_y_$99.999"] %>,
+      <%= histograma_transacciones["Entre_$100.000_y_$499.999"] %>,
+      <%= histograma_transacciones["Entre_$500.000_y_$999.999"] %>,
+      <%= histograma_transacciones["Entre_$1.000.000_y_$9.999.999"] %>,
+      <%= histograma_transacciones["Más_de_$9.999.999"] %>
+    ];
+  
+    // Configura y crea el gráfico
+    const ctx = document.createElement("canvas").getContext("2d");
+    document.body.appendChild(ctx.canvas);
+    
+  
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: histogramaEtiquetas,
+        datasets: [
+          {
+            label: "Cantidad de transacciones",
+            data: histogramaData,
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            precision: 0
+          }
+        }
+      }
+    });
+  </script>
+  
+  
 </body>
 </html>
+
+
+

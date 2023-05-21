@@ -21,6 +21,19 @@ let resumen_operaciones = {
           "numero_2400" : 0
 };
 
+let histograma_transacciones = {
+  "Menor_a_$10.000" : 0,
+  "Entre_$10.000_y_$49.999" : 0,
+  "Entre_$50.009_y_$99.999" : 0,
+  "Entre_$100.000_y_$499.999" : 0,
+  "Entre_$500.000_y_$999.999" : 0,
+  "Entre_$1.000.000_y_$9.999.999" : 0,
+  "Más_de_$9.999.999" : 0
+}
+
+
+
+
 
 const receivedTransactions = {};
 
@@ -55,6 +68,10 @@ app.post('', (req, res) => {
 
   
 
+  //console.log(histograma_transacciones)
+
+  
+
   //console.log(receivedTransactions);
   console.log(nueva_transaccion);
 
@@ -73,17 +90,32 @@ app.post('', (req, res) => {
       resumen_operaciones["monto_2400"] += nueva_transaccion["monto"];
       resumen_operaciones["numero_2400"] += 1;
     }
+    if (nueva_transaccion["monto"] < 10000) {
+      histograma_transacciones["Menor_a_$10.000"] += 1
+    } else if (nueva_transaccion["monto"] < 50000) {
+      histograma_transacciones["Entre_$10.000_y_$49.999"] += 1
+    } else if (nueva_transaccion["monto"] < 100000) {
+      histograma_transacciones["Entre_$50.009_y_$99.999"] += 1
+    } else if (nueva_transaccion["monto"] < 500000) {
+      histograma_transacciones["Entre_$100.000_y_$499.999"] += 1
+    } else if (nueva_transaccion["monto"] < 1000000) {
+      histograma_transacciones["Entre_$500.000_y_$999.999"] += 1
+    } else if (nueva_transaccion["monto"] < 10000000) {
+      histograma_transacciones["Entre_$1.000.000_y_$9.999.999"] += 1
+    } else {
+      histograma_transacciones["Más_de_$9.999.999"] += 1
+    }
 
 
   }
 
-  console.log(resumen_operaciones);
+  // console.log(resumen_operaciones);
   numero_de_transacciones = Object.keys(receivedTransactions).length;
   res.status(200);
 });
 
 app.get('/', (req, res) => {
-  res.render('index.ejs', { transactions: receivedTransactions , operaciones: numero_de_transacciones, resumen_operaciones: resumen_operaciones}); // Renderiza la plantilla y pasa los datos de receivedTransactions
+  res.render('index.ejs', { transactions: receivedTransactions , operaciones: numero_de_transacciones, resumen_operaciones: resumen_operaciones, histograma_transacciones: histograma_transacciones}); // Renderiza la plantilla y pasa los datos de receivedTransactions
 });
 
 
